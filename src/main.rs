@@ -1,11 +1,19 @@
 use inputbot::KeybdKey::*;
-use std::{time::Instant, string};
+use std::time::Instant;
+use std::fs::OpenOptions;
+use std::io::prelude::*;
+use std::fs::File;
+use std::path::Path;
 
 fn main() {
+    let filename = "output.txt";
 
     let initial = Instant::now();
 
-    F8Key.bind(move || {
+    create_file(filename);
+
+    F8Key.bind(
+        move || {
         if LShiftKey.is_pressed() && LControlKey.is_pressed() {
             let end = initial.elapsed().as_secs() as f64;
             let start = f64::max(end - 60f64, 0f64);
@@ -13,6 +21,8 @@ fn main() {
             let result = duration_str(start, end);
 
             println!("{}", result);
+
+            append_file(filename, result);
         }
     });
     
@@ -45,4 +55,22 @@ fn duration_str(start: f64, end: f64) -> String {
     let end_str = mins_secs_formatted(end_tuple);
 
     return format!("{} - {}", start_str, end_str);
+}
+
+fn create_file(filename: &str) {
+    let _file = match File::create(filename) {
+        Err(e) => panic!("{}", e),
+        Ok(_file) => _file,
+    };
+}
+
+fn append_file(filename: &str, text: String) {
+    let mut file = OpenOptions::new()
+        .append(true)
+        .open(filename)
+        .unwrap();
+
+    if let Err(e) = writeln!(file, "{}", text) {
+        eprintln!("{}", e);
+    }
 }
