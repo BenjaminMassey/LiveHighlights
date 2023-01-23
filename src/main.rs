@@ -4,6 +4,7 @@ use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::fs::File;
 use std::path::Path;
+use std::process;
 
 fn main() {
     let filename = "output.txt";
@@ -12,8 +13,7 @@ fn main() {
 
     create_file(filename);
 
-    F8Key.bind(
-        move || {
+    F8Key.bind(move || {
         if LShiftKey.is_pressed() && LControlKey.is_pressed() {
             let end = initial.elapsed().as_secs() as f64;
             let start = f64::max(end - 60f64, 0f64);
@@ -23,6 +23,12 @@ fn main() {
             println!("{}", result);
 
             append_file(filename, result);
+        }
+    });
+
+    F9Key.bind(move || {
+        if LShiftKey.is_pressed() && LControlKey.is_pressed() {
+            process::exit(0);
         }
     });
     
