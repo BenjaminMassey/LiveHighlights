@@ -1,13 +1,14 @@
 use inputbot::KeybdKey::*;
-use std::time::Instant;
+use std::fs::File;
 use std::fs::OpenOptions;
 use std::io::prelude::*;
-use std::fs::File;
 use std::process;
+use std::time::Instant;
 
 fn main() {
-
-    if false { test_time_functions(); }
+    if false {
+        test_time_functions();
+    }
 
     let filename = "output.txt";
 
@@ -32,19 +33,19 @@ fn main() {
             process::exit(0);
         }
     });
-    
+
     inputbot::handle_input_events();
 }
 
 fn secs_to_time(time: i32) -> [i32; 3] {
     let hours = time / 3600;
-    let minutes = (time % 3600) / 60; 
+    let minutes = (time % 3600) / 60;
     let seconds = (time % 3600) % 60;
     return [hours, minutes, seconds];
 }
 
 fn time_formatted(input: [i32; 3]) -> String {
-    let mut output = [ "".to_string(), "".to_string(), "".to_string() ];
+    let mut output = ["".to_string(), "".to_string(), "".to_string()];
     for i in 0..input.len() {
         let zero = if input[i] > 9 { "" } else { "0" };
         output[i] = format!("{}{}", zero, input[i]);
@@ -70,10 +71,7 @@ fn create_file(filename: &str) {
 }
 
 fn append_file(filename: &str, text: String) {
-    let mut file = OpenOptions::new()
-        .append(true)
-        .open(filename)
-        .unwrap();
+    let mut file = OpenOptions::new().append(true).open(filename).unwrap();
 
     if let Err(e) = writeln!(file, "{}", text) {
         eprintln!("{}", e);
@@ -81,8 +79,12 @@ fn append_file(filename: &str, text: String) {
 }
 
 fn test_time_functions() {
-    let test_values: Vec<i32> = vec![ 9, 61, 403, 8027, 481323 ];
+    let test_values: Vec<i32> = vec![9, 61, 403, 8027, 481323];
     for val in test_values.iter() {
-        println!("{} seconds -> \"{}\"", val, time_formatted(secs_to_time(*val)));
+        println!(
+            "{} seconds -> \"{}\"",
+            val,
+            time_formatted(secs_to_time(*val))
+        );
     }
 }
