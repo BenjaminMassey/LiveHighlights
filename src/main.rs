@@ -7,7 +7,7 @@ use std::process;
 
 fn main() {
 
-    if false {
+    if true {
         test_time_functions();
     }
 
@@ -19,8 +19,8 @@ fn main() {
 
     F8Key.bind(move || {
         if LShiftKey.is_pressed() && LControlKey.is_pressed() {
-            let end = initial.elapsed().as_secs() as f64;
-            let start = f64::max(end - 60f64, 0f64);
+            let end = initial.elapsed().as_secs() as i32;
+            let start = i32::max(end - 60, 0);
             let result = duration_str(start, end);
 
             println!("{}", result);
@@ -38,25 +38,25 @@ fn main() {
     inputbot::handle_input_events();
 }
 
-fn secs_to_time(time: f64) -> [f64; 3] {
-    let hours = f64::floor(time / 3600f64);
-    let minutes = f64::floor((time % 3600f64) / 60f64); 
-    let seconds = (time % 3600f64) % 60f64;
+fn secs_to_time(time: i32) -> [i32; 3] {
+    let hours = time / 3600;
+    let minutes = (time % 3600) / 60; 
+    let seconds = (time % 3600) % 60;
     return [hours, minutes, seconds];
 }
 
-fn time_formatted(input: [f64; 3]) -> String {
-    let mut output = Vec::new();
+fn time_formatted(input: [i32; 3]) -> String {
+    let mut output = [ "".to_string(), "".to_string(), "".to_string() ];
     for i in 0..input.len() {
-        let zero = if input[i] > 9f64 { "" } else { "0" };
-        output.push(format!("{}{}", zero, input[i]));
+        let zero = if input[i] > 9 { "" } else { "0" };
+        output[i] = format!("{}{}", zero, input[i]);
     }
     return format!("{}:{}:{}", output[0], output[1], output[2]);
 }
 
-fn duration_str(start: f64, end: f64) -> String {
-    let start_tuple = secs_to_time(start as f64);
-    let end_tuple = secs_to_time(end as f64);
+fn duration_str(start: i32, end: i32) -> String {
+    let start_tuple = secs_to_time(start);
+    let end_tuple = secs_to_time(end);
 
     let start_str = time_formatted(start_tuple);
     let end_str = time_formatted(end_tuple);
@@ -83,7 +83,7 @@ fn append_file(filename: &str, text: String) {
 }
 
 fn test_time_functions() {
-    let test_values: Vec<f64> = vec![ 9f64, 61f64, 403f64, 8027f64, 481323f64 ];
+    let test_values: Vec<i32> = vec![ 9, 61, 403, 8027, 481323 ];
     for val in test_values.iter() {
         println!("{} seconds -> \"{}\"", val, time_formatted(secs_to_time(*val)));
     }
