@@ -3,13 +3,6 @@
 version = 3
 
 [[package]]
-name = "LiveHighlights"
-version = "0.1.0"
-dependencies = [
- "inputbot",
-]
-
-[[package]]
 name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -138,6 +131,13 @@ checksum = "3c8469b4a23b962c1396b9b451dda50ef5b283e8dd309d69033475fa9b334324"
 dependencies = [
  "libc",
  "pkg-config",
+]
+
+[[package]]
+name = "live_highlights"
+version = "0.1.0"
+dependencies = [
+ "inputbot",
 ]
 
 [[package]]

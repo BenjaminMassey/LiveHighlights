@@ -41,7 +41,7 @@ fn secs_to_time(time: i32) -> [i32; 3] {
     let hours = time / 3600;
     let minutes = (time % 3600) / 60;
     let seconds = (time % 3600) % 60;
-    return [hours, minutes, seconds];
+    [hours, minutes, seconds]
 }
 
 fn time_formatted(input: [i32; 3]) -> String {
@@ -50,7 +50,7 @@ fn time_formatted(input: [i32; 3]) -> String {
         let zero = if input[i] > 9 { "" } else { "0" };
         output[i] = format!("{}{}", zero, input[i]);
     }
-    return format!("{}:{}:{}", output[0], output[1], output[2]);
+    format!("{}:{}:{}", output[0], output[1], output[2])
 }
 
 fn duration_str(start: i32, end: i32) -> String {
@@ -60,7 +60,7 @@ fn duration_str(start: i32, end: i32) -> String {
     let start_str = time_formatted(start_tuple);
     let end_str = time_formatted(end_tuple);
 
-    return format!("{} - {}", start_str, end_str);
+    format!("{} - {}", start_str, end_str)
 }
 
 fn create_file(filename: &str) {
