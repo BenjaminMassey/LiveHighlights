@@ -7,9 +7,7 @@ use std::process;
 
 fn main() {
 
-    if true {
-        test_time_functions();
-    }
+    if false { test_time_functions(); }
 
     let filename = "output.txt";
 
