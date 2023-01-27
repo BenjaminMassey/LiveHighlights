@@ -1,15 +1,11 @@
-use inputbot::KeybdKey::*;
-use std::fs::File;
-use std::fs::OpenOptions;
+use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
 use std::process;
 use std::time::Instant;
 
-fn main() {
-    if false {
-        test_time_functions();
-    }
+use inputbot::KeybdKey::*;
 
+fn main() {
     let filename = "output.txt";
 
     let initial = Instant::now();
@@ -78,13 +74,16 @@ fn append_file(filename: &str, text: String) {
     }
 }
 
+#[test]
 fn test_time_functions() {
-    let test_values: Vec<i32> = vec![9, 61, 403, 8027, 481323];
-    for val in test_values.iter() {
-        println!(
-            "{} seconds -> \"{}\"",
-            val,
-            time_formatted(secs_to_time(*val))
-        );
+    let test_values = [
+        (9, "00:00:09"),
+        (61, "00:01:01"),
+        (403, "00:06:43"),
+        (8027, "02:13:47"),
+        (481323, "133:42:03"),
+    ];
+    for (secs, time) in test_values.iter() {
+        assert_eq!(*time, time_formatted(secs_to_time(*secs)));
     }
 }
