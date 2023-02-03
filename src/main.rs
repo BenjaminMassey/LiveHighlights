@@ -1,14 +1,11 @@
-use inputbot::KeybdKey::*;
-use std::time::Instant;
-use std::fs::OpenOptions;
+use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
-use std::fs::File;
 use std::process;
+use std::time::Instant;
+
+use inputbot::KeybdKey::*;
 
 fn main() {
-
-    if false { test_time_functions(); }
-
     let filename = "output.txt";
 
     let initial = Instant::now();
@@ -32,24 +29,24 @@ fn main() {
             process::exit(0);
         }
     });
-    
+
     inputbot::handle_input_events();
 }
 
 fn secs_to_time(time: i32) -> [i32; 3] {
     let hours = time / 3600;
-    let minutes = (time % 3600) / 60; 
+    let minutes = (time % 3600) / 60;
     let seconds = (time % 3600) % 60;
-    return [hours, minutes, seconds];
+    [hours, minutes, seconds]
 }
 
 fn time_formatted(input: [i32; 3]) -> String {
-    let mut output = [ "".to_string(), "".to_string(), "".to_string() ];
+    let mut output = ["".to_string(), "".to_string(), "".to_string()];
     for i in 0..input.len() {
         let zero = if input[i] > 9 { "" } else { "0" };
         output[i] = format!("{}{}", zero, input[i]);
     }
-    return format!("{}:{}:{}", output[0], output[1], output[2]);
+    format!("{}:{}:{}", output[0], output[1], output[2])
 }
 
 fn duration_str(start: i32, end: i32) -> String {
@@ -59,7 +56,7 @@ fn duration_str(start: i32, end: i32) -> String {
     let start_str = time_formatted(start_tuple);
     let end_str = time_formatted(end_tuple);
 
-    return format!("{} - {}", start_str, end_str);
+    format!("{} - {}", start_str, end_str)
 }
 
 fn create_file(filename: &str) {
@@ -70,19 +67,23 @@ fn create_file(filename: &str) {
 }
 
 fn append_file(filename: &str, text: String) {
-    let mut file = OpenOptions::new()
-        .append(true)
-        .open(filename)
-        .unwrap();
+    let mut file = OpenOptions::new().append(true).open(filename).unwrap();
 
     if let Err(e) = writeln!(file, "{}", text) {
         eprintln!("{}", e);
     }
 }
 
+#[test]
 fn test_time_functions() {
-    let test_values: Vec<i32> = vec![ 9, 61, 403, 8027, 481323 ];
-    for val in test_values.iter() {
-        println!("{} seconds -> \"{}\"", val, time_formatted(secs_to_time(*val)));
+    let test_values = [
+        (9, "00:00:09"),
+        (61, "00:01:01"),
+        (403, "00:06:43"),
+        (8027, "02:13:47"),
+        (481323, "133:42:03"),
+    ];
+    for (secs, time) in test_values.iter() {
+        assert_eq!(*time, time_formatted(secs_to_time(*secs)));
     }
 }
