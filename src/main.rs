@@ -1,3 +1,6 @@
+extern crate chrono;
+
+use chrono::Local;
 use std::fs::{File, OpenOptions};
 use std::io::prelude::*;
 use std::process;
@@ -6,11 +9,16 @@ use std::time::Instant;
 use inputbot::KeybdKey::*;
 
 fn main() {
-    let filename = "output.txt";
+    let chrono_timestamp = Local::now();
+    let timestamp = format!("{}", chrono_timestamp.format("%Y-%m-%d--%H-%M-%S"));
+
+    let filename = format!("output--{timestamp}.txt");
+
+    println!("{filename}");
+
+    create_file(&filename);
 
     let initial = Instant::now();
-
-    create_file(filename);
 
     F8Key.bind(move || {
         if LShiftKey.is_pressed() && LControlKey.is_pressed() {
@@ -20,7 +28,7 @@ fn main() {
 
             println!("{}", result);
 
-            append_file(filename, result);
+            append_file(&filename, result);
         }
     });
 
